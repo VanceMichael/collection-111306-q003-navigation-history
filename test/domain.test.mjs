@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile,mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import * as domain from '../src/domain.mjs';
+const data=JSON.parse(await readFile(new URL('../fixtures/source.json',import.meta.url))).data;
+const {navigationObservation,preview}=domain;
+test('资料对象的领域边界和原始预览',async()=>{assert.throws(()=>navigationObservation({url:'/'}));
+assert.notDeepEqual(navigationObservation({url:'/',document:'d',historyItem:'a',reason:'route'}),navigationObservation({url:'/',document:'d',historyItem:'b',reason:'route'}));assert.equal(preview(data).generation,1);});
